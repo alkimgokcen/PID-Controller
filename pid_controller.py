@@ -33,7 +33,7 @@ class PID_Controller:
     # changes and Z represents the code structure-related changes. 
     #-------------------------------------------------------------------------------------
     def __init__(self, Kp, Ki, Kd, sampleTime):
-        self.Version = "V1.0.0"
+        self.Version = "V1.1.0"
         self.Kp = Kp
         self.Ki = Ki
         self.Kd = Kd
