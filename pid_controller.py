@@ -1,7 +1,4 @@
 
-import time
-import os
-
 
 
 
@@ -29,15 +26,20 @@ class PID_Controller:
     #                    Important Notes on Usage of The PID Controller
     # Please, do not forget to call controller algorithm appropriate to controller gains
     #-------------------------------------------------------------------------------------
-    # V1.0.0
+    # Version control: VX.Y.Z, X represents the algorithm-related changes, Y represents the feature-related
+    # changes and Z represents the code structure-related changes. 
     #-------------------------------------------------------------------------------------
     def __init__(self, Kp, Ki, Kd, sampleTime):
+        self.Version = "V1.0.0"
         self.Kp = Kp
         self.Ki = Ki
         self.Kd = Kd
         self.sampleTime = sampleTime
         self.delayedTrackingError = 0
         self.integralError = 0
+    
+    def getLibVersion(self):
+        return self.Version
         
     def computeError(self, actualOutput, desiredOutput):
         trackingError = desiredOutput - actualOutput
@@ -95,8 +97,8 @@ class PID_Controller:
         iError = self.computeIntegral(errorSignal)
         u = self.Kd * dError + self.Ki * iError
         return u, errorSignal, dError, iError
+    
+    
+    
 
-
-
-
-
+        
