@@ -3,7 +3,6 @@
 
 
 class PID_Controller:
-
     #-------------------------------------------------------------------------------------
     # Alkim GOKCEN - University of Izmir Katip Celebi - alkim.gokcen@outlook.com
     # PID Control Library - Nov, 2022
@@ -29,30 +28,31 @@ class PID_Controller:
     #                    Important Notes on Usage of The PID Controller
     # Please, do not forget to call controller algorithm appropriate to controller gains
     #-------------------------------------------------------------------------------------
-    # Version control: VX.Y.Z, X represents the algorithm-related changes, Y represents the feature-related
-    # changes and Z represents the code structure-related changes. 
+    # Version control: VX.Y.Z, X represents the algorithm-related changes, Y represents 
+    # the feature-related changes and Z represents the code structure-related changes. 
     #-------------------------------------------------------------------------------------
-    def __init__(self, Kp, Ki, Kd, sampleTime):
-        self.Version = "V1.1.0"
-        self.Kp = Kp
-        self.Ki = Ki
-        self.Kd = Kd
-        self.sampleTime = sampleTime
-        self.delayedTrackingError = 0
-        self.integralError = 0
+    def __init__(self, Kp, Ki, Kd, sampleTime = 1e-1): # class initialization
+        self.Version = "V1.1.0" # represents the software version
+        self.Kp = Kp # proportional gain is initialized
+        self.Ki = Ki # integral gain is initialized
+        self.Kd = Kd # derivative gain is initialized
+        self.sampleTime = sampleTime # sample time is initialized for integration and derivation. Default = 0.1 seconds
+        self.delayedTrackingError = 0 # delayed error term is initialized
+        self.integralError = 0 # integrated value is initialized
+        # thresholding limits are initialized
         self.output_min = None
         self.output_max = None
         self.integral_min = None
         self.integral_max = None
         
     def getLibVersion(self):
-        return self.Version
+        return self.Version # returns the library version. 
     
-    def integralClamp(self, min, max):
+    def integralClamp(self, min, max): # allows you to determine limit boundaries for integral clampler
         self.integral_min = min
         self.integral_max = max
     
-    def integralCampler(self, integratedValue):
+    def integralCampler(self, integratedValue): # allows you to apply limit boundaries.
         if self.integral_min is not None and integratedValue < self.integral_min:
             return self.integral_min
         elif self.integral_max is not None and integratedValue > self.integral_max:
@@ -86,7 +86,6 @@ class PID_Controller:
         self.integralError = self.integralError + trackingError * self.sampleTime
         return self.integralError
     
-    
     def PID(self, PlantOutput, reference):
         errorSignal = self.computeError(PlantOutput, reference)
         dError = self.computeDerivative(errorSignal)
@@ -94,6 +93,7 @@ class PID_Controller:
         iError = self.integralCampler(iError)
         u = errorSignal * self.Kp + dError * self.Kd + iError * self.Ki
         u = self.apply_limits(u)
+        print(iError)
         return u, errorSignal, dError, iError
     
     def P(self, PlantOutput, reference):
